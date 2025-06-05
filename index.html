@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>الخيزران للمحاسبة - النسخة الشاملة</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>الخيزران للمحاسبة</h1>
+  </header>
+
+  <nav>
+    <button class="tab-btn active" data-tab="inventory">المخزون</button>
+    <button class="tab-btn" data-tab="accounts">الحسابات</button>
+    <button class="tab-btn" data-tab="invoices">الفواتير</button>
+    <button class="tab-btn" data-tab="reports">التقارير</button>
+    <button class="tab-btn" data-tab="settings">الإعدادات</button>
+  </nav>
+
+  <main>
+    <!-- المخزون -->
+    <section id="inventory" class="tab-content active">
+      <h2>إدارة المواد</h2>
+      <form id="add-item-form">
+        <input type="text" id="item-name" placeholder="اسم المادة" required />
+        <select id="unit-select" required>
+          <option value="piece">قطعة</option>
+          <option value="box">صندوق</option>
+          <option value="kg">كغ</option>
+        </select>
+        <input type="number" id="item-quantity" placeholder="الكمية" min="0" step="any" required />
+        <input type="number" id="item-price" placeholder="سعر الوحدة" min="0" step="any" required />
+        <label><input type="checkbox" id="low-stock-alert" /> تنبيه عند انخفاض الكمية</label>
+        <input type="number" id="low-stock-limit" placeholder="حد التنبيه" min="0" step="any" />
+        <button type="submit">إضافة / تعديل المادة</button>
+      </form>
+
+      <h3>المواد المخزنة</h3>
+      <ul id="items-list"></ul>
+    </section>
+
+    <!-- الحسابات -->
+    <section id="accounts" class="tab-content">
+      <h2>إدارة الحسابات</h2>
+      <form id="add-account-form">
+        <input type="text" id="account-name" placeholder="اسم العميل أو المورد" required />
+        <select id="account-type">
+          <option value="customer">عميل</option>
+          <option value="supplier">مورد</option>
+        </select>
+        <button type="submit">إضافة حساب</button>
+      </form>
+
+      <h3>قائمة الحسابات</h3>
+      <ul id="accounts-list"></ul>
+
+      <h3>تسجيل حركة مالية</h3>
+      <form id="add-transaction-form">
+        <select id="transaction-account" required></select>
+        <select id="transaction-kind" required>
+          <option value="debt">دين</option>
+          <option value="payment">مدفوعات</option>
+          <option value="receipt">مقبوضات</option>
+          <option value="expense">مصروف</option>
+          <option value="income">إيراد</option>
+        </select>
+        <input type="number" id="transaction-amount" placeholder="المبلغ" min="0" step="any" required />
+        <button type="submit">تسجيل</button>
+      </form>
+
+      <h3>كشف الحساب</h3>
+      <div id="account-statement"></div>
+    </section>
+
+    <!-- الفواتير -->
+    <section id="invoices" class="tab-content">
+      <h2>الفواتير</h2>
+
+      <form id="create-invoice-form">
+        <select id="invoice-type">
+          <option value="sale">فاتورة بيع</option>
+          <option value="purchase">فاتورة شراء</option>
+        </select>
+
+        <select id="invoice-account" required></select>
+
+        <button type="button" id="add-invoice-item-btn">إضافة مادة إلى الفاتورة</button>
+
+        <table id="invoice-items-table">
+          <thead>
+            <tr>
+              <th>المادة</th>
+              <th>الكمية</th>
+              <th>الوحدة</th>
+              <th>سعر الوحدة</th>
+              <th>الإجمالي</th>
+              <th>حذف</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div>إجمالي الفاتورة: <span id="invoice-total">0</span></div>
+
+        <button type="submit">حفظ الفاتورة وطباعة</button>
+      </form>
+    </section>
+
+    <!-- التقارير -->
+    <section id="reports" class="tab-content">
+      <h2>التقارير</h2>
+      <form id="report-form">
+        <label>من: <input type="date" id="report-start" required /></label>
+        <label>إلى: <input type="date" id="report-end" required /></label>
+        <button type="submit">عرض التقرير</button>
+      </form>
+
+      <div id="report-result"></div>
+    </section>
+
+    <!-- الإعدادات -->
+    <section id="settings" class="tab-content">
+      <h2>الإعدادات</h2>
+
+      <h3>العملات</h3>
+      <form id="add-currency-form">
+        <input type="text" id="currency-code" placeholder="رمز العملة (مثلاً SYP)" required maxlength="3" />
+        <input type="text" id="currency-name" placeholder="اسم العملة" required />
+        <input type="number" id="currency-rate" placeholder="سعر الصرف مقابل الليرة السورية" min="0" step="any" required />
+        <button type="submit">إضافة / تعديل عملة</button>
+      </form>
+
+      <h3>قائمة العملات</h3>
+      <ul id="currencies-list"></ul>
+
+      <h3>مزامنة ونسخ احتياطي</h3>
+      <button id="export-data-btn">تصدير نسخة احتياطية (JSON)</button>
+      <input type="file" id="import-data-input" accept=".json" />
+      <button id="import-data-btn">استيراد نسخة احتياطية</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
